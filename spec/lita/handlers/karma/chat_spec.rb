@@ -14,8 +14,10 @@ describe Lita::Handlers::Karma::Chat, lita_handler: true do
   end
 
   it { is_expected.to route("foo++").to(:increment) }
+  it { is_expected.to route("foo ++").to(:increment) }
   it { is_expected.to route("foo--").to(:decrement) }
   it { is_expected.to route("foo++ bar").to(:increment) }
+  it { is_expected.to route("foo ++ bar").to(:increment) }
   it { is_expected.to route("foo-- bar").to(:decrement) }
   it { is_expected.to route("foo~~").to(:check) }
   it { is_expected.to route_command("karma best").to(:list_best) }
