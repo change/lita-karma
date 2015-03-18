@@ -205,7 +205,7 @@ module Lita::Handlers::Karma
     # modifications, force karma tokens be followed by whitespace (in a zero-
     # width, look-ahead operator) or the end of the string.
     def token_terminator
-      %r{(?:(?=\s)|$)}
+      %r{(?:(?=\s)|[.,!]|$)}
     end
   end
 end
