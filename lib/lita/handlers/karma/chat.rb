@@ -110,13 +110,13 @@ module Lita::Handlers::Karma
       )
 
       self.class.route(
-        %r{(#{pattern})--#{token_terminator.source}},
+        %r{(#{pattern}) {0,1}--#{token_terminator.source}},
         :decrement,
         help: { t("help.decrement_key") => t("help.decrement_value") }
       )
 
       self.class.route(
-        %r{(#{pattern})~~#{token_terminator.source}},
+        %r{(#{pattern}) {0,1}~~#{token_terminator.source}},
         :check,
         help: { t("help.check_key") => t("help.check_value") }
       )
