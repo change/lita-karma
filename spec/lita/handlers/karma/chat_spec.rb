@@ -14,17 +14,16 @@ describe Lita::Handlers::Karma::Chat, lita_handler: true do
   end
 
   it { is_expected.to route("foo++").to(:increment) }
-  it { is_expected.to route("foo ++").to(:increment) }
   it { is_expected.to route("foo--").to(:decrement) }
   it { is_expected.to route("foo++ bar").to(:increment) }
   it { is_expected.to route("foo++, bar").to(:increment) }
   it { is_expected.to route("foo++! bar").to(:increment) }
   it { is_expected.to route("(foo++) bar").to(:increment) }
-  it { is_expected.to route("foo ++ bar").to(:increment) }
+  it { is_expected.to route("@foo ++ bar").to(:increment) }
   it { is_expected.to route("foo-- bar").to(:decrement) }
-  it { is_expected.to route("foo -- bar").to(:decrement) }
+  it { is_expected.to route("@foo -- bar").to(:decrement) }
   it { is_expected.to route("foo~~").to(:check) }
-  it { is_expected.to route("foo ~~").to(:check) }
+  it { is_expected.to route("@foo ~~").to(:check) }
   it { is_expected.to route_command("karma best").to(:list_best) }
   it { is_expected.to route_command("karma worst").to(:list_worst) }
   it { is_expected.to route_command("karma modified foo").to(:modified) }
@@ -40,6 +39,9 @@ describe Lita::Handlers::Karma::Chat, lita_handler: true do
   it { is_expected.not_to route("foo--bar").to(:decrement) }
   it { is_expected.not_to route("foo ++bar").to(:increment) }
   it { is_expected.not_to route("foo --bar").to(:decrement) }
+  it { is_expected.not_to route("foo ++ bar").to(:increment) }
+  it { is_expected.not_to route("foo -- bar").to(:decrement) }
+  it { is_expected.not_to route("foo ~~ bar").to(:decrement) }
 
   describe "#increment" do
     it "increases the term's score by one and says the new score" do
@@ -74,6 +76,11 @@ describe Lita::Handlers::Karma::Chat, lita_handler: true do
     it "handles Unicode word characters" do
       send_message("föö++")
       expect(replies.last).to eq("föö: 1")
+    end
+
+    it 'eats spaces after @mentions' do
+      send_message("@foo ++")
+      expect(replies.last).to eq("foo: 1")
     end
 
     context "with decay enabled" do

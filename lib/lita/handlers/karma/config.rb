@@ -22,7 +22,7 @@ module Lita::Handlers::Karma
 
     config :cooldown, types: [Integer, nil], default: 300
     config :link_karma_threshold, types: [Integer, nil], default: 10
-    config :term_pattern, type: Regexp, default: /[\[\]\p{Word}\._|\{\}]{2,}/
+    config :term_pattern, type: Regexp, default: /(?:[\[\]\p{Word}\._|\{\}]{2,}|(?<=@)\p{Word}+ ?)/
     config :term_normalizer, default: method(:default_term_normalizer) do
       validate(&CALLABLE_VALIDATOR)
     end
