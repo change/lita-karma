@@ -19,6 +19,8 @@ describe Lita::Handlers::Karma::Chat, lita_handler: true do
   it { is_expected.to route("foo++, bar").to(:increment) }
   it { is_expected.to route("foo++! bar").to(:increment) }
   it { is_expected.to route("(foo++) bar").to(:increment) }
+  it { is_expected.to route(%Q{"foo++” bar"}).to(:increment) }
+  it { is_expected.to route("“foo++” bar").to(:increment) }
   it { is_expected.to route("@foo ++ bar").to(:increment) }
   it { is_expected.to route("foo-- bar").to(:decrement) }
   it { is_expected.to route("@foo -- bar").to(:decrement) }
