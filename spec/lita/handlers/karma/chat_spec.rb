@@ -225,6 +225,26 @@ MSG
       )
     end
 
+    it "only shows links with non-zero values when modifying" do
+      send_message("foo++ bar++ baz++")
+      send_command("foo += bar")
+      send_command("foo += baz")
+      send_command("baz--")
+      send_message("foo++")
+      expect(replies.last).to eq('foo: 3 (2), linked to: bar: 1')
+    end
+
+    it 'still shows all links when checking' do
+      send_message("foo++ bar++ baz++")
+      send_command("foo += bar")
+      send_command("foo += baz")
+      send_command("baz--")
+      send_message("foo~~")
+      expect(replies.last).to match(
+        /foo: 2 \(1\), linked to: (ba(r: 1|z: 0)), (ba(r: 1|z: 0))/
+      )
+    end
+
     context "when link_karma_threshold is set" do
       before do
         registry.config.handlers.karma.link_karma_threshold = 1

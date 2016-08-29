@@ -31,11 +31,11 @@
       @link_cache = {}
     end
 
-    def check
+    def check(show_all = true)
       string = "#{self}: #{total_score}"
 
       unless links_with_scores.empty?
-        link_text = links_with_scores.map { |term, score| "#{term}: #{score}" }.join(", ")
+        link_text = links_with_scores.map { |term, score| "#{term}: #{score}" if show_all || score.abs > 0 }.compact.join(", ")
         string << " (#{own_score}), #{t("linked_to")}: #{link_text}"
       end
 
@@ -158,7 +158,7 @@
       redis.zincrby("modified:#{self}", 1, user_id)
       redis.setex("cooldown:#{user_id}:#{self}", config.cooldown, 1) if config.cooldown
       add_action(user_id, delta)
-      check
+      check(false)
     end
 
     def normalize_term(term)
