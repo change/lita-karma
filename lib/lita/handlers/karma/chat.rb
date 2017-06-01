@@ -104,7 +104,8 @@ module Lita::Handlers::Karma
 
     def define_dynamic_routes(pattern)
       self.class.route(
-        %r{(#{pattern})\+\+#{token_terminator.source}},
+        # Extra + is intentional: Folks get excited and add more +’s than 2
+        %r{(#{pattern})\+\++#{token_terminator.source}},
         :increment,
         help: { t("help.increment_key") => t("help.increment_value") }
       )
