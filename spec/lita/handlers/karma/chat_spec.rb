@@ -236,6 +236,16 @@ MSG
       expect(replies.last).to eq('foo: 3 (2), linked to: bar: 1')
     end
 
+    it 'only shows linked to: when there are positive links' do
+      send_message("foo++ bar++ baz++")
+      send_command("foo += bar")
+      send_command("foo += baz")
+      send_command("baz--")
+      send_message("bar--")
+      send_message("foo++")
+      expect(replies.last).to eq('foo: 2')
+    end
+
     it 'still shows all links when checking' do
       send_message("foo++ bar++ baz++")
       send_command("foo += bar")

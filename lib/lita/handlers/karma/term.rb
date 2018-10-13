@@ -34,8 +34,10 @@
     def check(show_all = true)
       string = "#{self}: #{total_score}"
 
-      unless links_with_scores.empty?
-        link_text = links_with_scores.map { |term, score| "#{term}: #{score}" if show_all || score.abs > 0 }.compact.join(", ")
+      scores = show_all ? links_with_scores : links_with_non_zero_scores
+
+      unless scores.empty?
+        link_text = scores.map { |term, score| "#{term}: #{score}" }.join(", ")
         string << " (#{own_score}), #{t("linked_to")}: #{link_text}"
       end
 
@@ -97,6 +99,10 @@
           end
         end
       end
+    end
+
+    def links_with_non_zero_scores
+      @links_with_non_zero_scores ||= links_with_scores.reject {|k,v| v.zero? }
     end
 
     def modified
